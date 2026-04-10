@@ -1,6 +1,6 @@
 package dev.aqthurn.hardening_api.service;
 
-
+import dev.aqthurn.hardening_api.dto.*;
 import dev.aqthurn.hardening_api.model.ScanReport;
 import dev.aqthurn.hardening_api.repository.ScanReportRepository;
 import org.springframework.stereotype.Service;
@@ -16,18 +16,25 @@ public class ScanReportService {
         this.repository = repository;
     }
 
-    public ScanReport save(ScanReport report){
-        return repository.save(report);
+    public ScanReport save(ScanReportRequest request){
+        ScanReport report = toEntity(request);
+        ScanReport saved = repository.save(report);
+        return toResponse(saved);
 
     }
 
-    public List<ScanReport> findAll(){
-        return repository.findAll();
+    public List<ScanReportResponse> findAll(){
+        return repository.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    public ScanReport findById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Report not found: " +id ));
+    public ScanReportResponse findById(Long id) {
+        ScanReport report = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Report not found: " + id));
+        return toResponse(report);
     }
+
+
 
 }
