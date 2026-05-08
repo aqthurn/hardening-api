@@ -6,23 +6,23 @@ import java.util.List;
 public class ScanReportResponse {
 
     private Long id;
-    private String hostName;
+    private String hostname;
     private String ipAddress;
     private LocalDateTime scannedAt;
     private int totalChecks;
     private int passedChecks;
-    private int faildedChecks;
+    private int failedChecks;
     private List<CheckResultResponse> results;
 
-    public ScanReportResponse(Long id, String hostName, String ipAddress, LocalDateTime scannedAt, int totalChecks, int passedChecks, int faildedChecks, List<CheckResultResponse> results){
+    public ScanReportResponse(Long id, String hostname, String ipAddress, LocalDateTime scannedAt, int totalChecks, int passedChecks, int failedChecks, List<CheckResultResponse> results){
 
         this.id = id;
-        this.hostName = hostName;
+        this.hostname = hostname;
         this.ipAddress = ipAddress;
         this.scannedAt = scannedAt;
         this.totalChecks = totalChecks;
         this.passedChecks = passedChecks;
-        this.faildedChecks = faildedChecks;
+        this.failedChecks = failedChecks;
         this.results = results;
     }
 
@@ -30,8 +30,8 @@ public class ScanReportResponse {
         return id;
     }
 
-    public String getHostName() {
-        return hostName;
+    public String getHostname() {
+        return hostname;
     }
 
     public LocalDateTime getScannedAt() {
@@ -50,8 +50,8 @@ public class ScanReportResponse {
         return passedChecks;
     }
 
-    public int getFaildedChecks() {
-        return faildedChecks;
+    public int getFailedChecks() {
+        return failedChecks;
     }
 
     public List<CheckResultResponse> getResults() {

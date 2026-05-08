@@ -74,5 +74,54 @@ public class ScanReportService {
     }
 
 
+    private ScanReport toEntity(ScanReportRequest request) {
+        ScanReport report = new ScanReport();
+        report.setHostname(request.getHostname());
+        report.setIpAddress(request.getIpAddress());
+        report.setScannedAt(request.getScannedAt());
+        report.setTotalChecks(request.getTotalChecks());
+        report.setPassedChecks(request.getPassedChecks());
+        report.setFailedChecks(request.getFailedChecks());
 
+        if (request.getResults() != null) {
+            List<CheckResult> results = request.getResults().stream()
+                    .map(r -> {
+                        CheckResult cr = new CheckResult();
+                        cr.setCheckName(r.getCheckName());
+                        cr.setStatus(r.getStatus());
+                        cr.setMessage(r.getMessage());
+                        cr.setScanReport(report);
+                        return cr;
+                    })
+                    .toList();
+            report.setResults(results);
+        }
+
+        return report;
+    }
+    private ScanReportResponse toResponse(ScanReport report) {
+        List<CheckResultResponse> results = List.of();
+
+        if (report.getResults() != null) {
+            results = report.getResults().stream()
+                    .map(r -> new CheckResultResponse(
+                            r.getId(),
+                            r.getCheckName(),
+                            r.getStatus(),
+                            r.getMessage()
+                    ))
+                    .toList();
+        }
+
+        return new ScanReportResponse(
+                report.getId(),
+                report.getHostname(),
+                report.getIpAddress(),
+                report.getScannedAt(),
+                report.getTotalChecks(),
+                report.getPassedChecks(),
+                report.getFailedChecks(),
+                results
+        );
+    }
 }
