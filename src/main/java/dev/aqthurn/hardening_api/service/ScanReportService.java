@@ -7,25 +7,23 @@ import dev.aqthurn.hardening_api.repository.ScanReportRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Service
 
+@Service
 public class ScanReportService {
 
     private final ScanReportRepository repository;
-
 
     public ScanReportService(ScanReportRepository repository) {
         this.repository = repository;
     }
 
-    public ScanReportResponse save(ScanReportRequest request){
+    public ScanReportResponse save(ScanReportRequest request) {
         ScanReport report = toEntity(request);
         ScanReport saved = repository.save(report);
         return toResponse(saved);
-
     }
 
-    public List<ScanReportResponse> findAll(){
+    public List<ScanReportResponse> findAll() {
         return repository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
@@ -36,43 +34,6 @@ public class ScanReportService {
                 .orElseThrow(() -> new RuntimeException("Report not found: " + id));
         return toResponse(report);
     }
-
-    private ScanReport toEntity(ScanReportRequest request){
-        ScanReport report = new ScanReport();
-        report.setHostname(request.getHostname());
-        report.setIpAddress(request.getIpAddress());
-        report.setScannedAt(request.getScannedAt());
-        report.setTotalChecks(request.getTotalChecks());
-        report.setPassedChecks(request.getPassedChecks());
-        report.setFailedChecks(request.getFailedChecks());
-
-        if (request.getResults() != null) {
-            List<CheckResult> results = request.getResults().stream()
-                    .map(cr -> {
-                        CheckResult entity = new CheckResult();
-                        report.setHostname(request.getHostname());
-                        report.setIpAddress(request.getIpAddress());
-                        report.setScannedAt(request.getScannedAt());
-                        report.setTotalChecks(request.getTotalChecks());
-                        report.setPassedChecks(request.getPassedChecks());
-                        report.setFailedChecks(request.getFailedChecks());
-                    })
-                    .toList();
-            report.setResults(results);
-        }
-
-
-
-        return report;
-    }
-
-
-
-    private ScanReportResponse toResponse(ScanReport report){
-
-
-    }
-
 
     private ScanReport toEntity(ScanReportRequest request) {
         ScanReport report = new ScanReport();
@@ -99,6 +60,7 @@ public class ScanReportService {
 
         return report;
     }
+
     private ScanReportResponse toResponse(ScanReport report) {
         List<CheckResultResponse> results = List.of();
 
